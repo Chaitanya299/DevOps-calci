@@ -1,98 +1,49 @@
 # Simple Calculator
 
-A simple, interactive calculator web application with a modern UI.
+🎯 **Interactive calculator web application with modern UI, Docker containerization, and Kubernetes deployment.**
 
-## Features
+## 🚀 Quick Start
 
-- ✨ Basic arithmetic operations: Addition, Subtraction, Multiplication, Division
-- 🎨 Modern gradient UI with smooth animations
-- ⌨️ Keyboard support for quick calculations
-- 🛡️ Error handling (e.g., division by zero)
-- 📱 Responsive design
-
-## Quick Start
-
-### Prerequisites
-- Node.js (v18 or higher)
-
-### Installation & Running
-
-1. Clone the repository
 ```bash
-git clone <your-repo-url>
-cd windsurf-project
-```
-
-2. Start the server
-```bash
+# Start locally
 node server.js
+# Visit: http://localhost:3000
+
+# Or with Docker
+docker-compose -f docker/docker-compose.yml up
+
+# Or deploy to Kubernetes
+./deploy-to-k8s.sh
 ```
 
-3. Open your browser and visit
-```
-http://localhost:3000
-```
+## 📚 Documentation
 
-## Usage
+📖 **[Complete Documentation →](docs/README.md)**
 
-### Mouse Controls
-Click the calculator buttons to perform operations.
+**Key Guides:**
+- 🐳 **[Docker Guide](docker/DOCKER_BUILD_GUIDE.md)**
+- ☸️ **[Kubernetes Guide](docs/KUBERNETES_GUIDE.md)**
+- 🔧 **[Git Deployment](docs/PUSH_TO_MASTER.md)**
+- 📁 **[Project Structure](docs/PROJECT_STRUCTURE.md)**
 
-### Keyboard Shortcuts
-- **Numbers (0-9)**: Input numbers
-- **Operators (+, -, *, /)**: Perform operations
-- **Enter or =**: Calculate result
-- **Escape**: Clear all (AC)
-- **Backspace**: Delete last digit
+## ✨ Features
 
-## Project Structure
+- 🎨 Modern dark theme with smooth animations
+- 🔢 Full calculator functionality (+, -, ×, ÷)
+- ⌨️ Keyboard support for quick calculations
+- 🐳 Docker containerization (multi-stage builds)
+- ☸️ Kubernetes deployment (local cluster testing)
+- 🔧 GitHub Actions CI/CD pipeline
+- 📱 Responsive design for all devices
 
-```
-windsurf-project/
-├── .github/
-│   └── workflows/
-│       └── ci.yml          # GitHub Actions CI pipeline
-├── index.html              # Calculator UI
-├── server.js               # Node.js server
-├── package.json            # Project configuration
-└── README.md               # This file
-```
+## 🛠️ Technologies
 
-## CI/CD Pipeline
+- **Frontend:** HTML5, CSS3, Vanilla JavaScript
+- **Backend:** Node.js HTTP server
+- **Containerization:** Docker with multi-stage builds
+- **Orchestration:** Kubernetes with kind
+- **CI/CD:** GitHub Actions
 
-This project includes a GitHub Actions CI pipeline that:
+---
 
-### Build & Test Job
-- ✅ Tests on Node.js 18.x and 20.x
-- ✅ Verifies all required files exist
-- ✅ Checks JavaScript syntax
-- ✅ Starts the server and validates it's running
-- ✅ Tests HTTP responses
-- ✅ Verifies HTML content is served correctly
-
-### Lint Job
-- ✅ Validates HTML5 structure
-- ✅ Checks for required HTML elements
-- ✅ Validates package.json format
-
-The pipeline runs automatically on:
-- Push to `main`, `master`, or `develop` branches
-- Pull requests to these branches
-
-## Development
-
-To run the project locally:
-```bash
-npm start
-```
-
-To stop the server:
-```bash
-# Press Ctrl+C in the terminal
-# Or kill the process
-pkill -f "node server.js"
-```
-
-## License
-
-ISC
+*📖 **[View Full Documentation](docs/README.md)** for detailed setup and usage instructions.*

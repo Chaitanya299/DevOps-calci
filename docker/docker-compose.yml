@@ -1,0 +1,34 @@
+version: '3.8'
+
+services:
+  calculator:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: runtime
+    container_name: simple-calculator
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=production
+    healthcheck:
+      test: ["CMD", "node", "-e", "require('http').get('http://localhost:3000', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})"]
+
+# For development with hot reload (optional)
+  calculator-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: builder
+    container_name: calculator-dev
+    ports:
+      - "3001:3000"
+    volumes:
+      - .:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+    command: npm start
+    profiles:
+      - dev
