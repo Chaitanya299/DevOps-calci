@@ -1,0 +1,12 @@
+{
+  "name": "simple-calculator",
+  "version": "1.0.0",
+  "description": "A simple interactive calculator web application",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "keywords": ["calculator", "web", "interactive"],
+  "author": "",
+  "license": "ISC"
+}
