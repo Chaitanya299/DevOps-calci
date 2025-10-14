@@ -1,0 +1,126 @@
+name: CI Pipeline
+
+on:
+  push:
+    branches: [ main, master, develop ]
+  pull_request:
+    branches: [ main, master, develop ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x]
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Setup Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+    
+    - name: Install dependencies
+      run: npm install
+    
+    - name: Verify server file exists
+      run: |
+        if [ ! -f server.js ]; then
+          echo "Error: server.js not found"
+          exit 1
+        fi
+        echo "✓ server.js found"
+    
+    - name: Verify HTML file exists
+      run: |
+        if [ ! -f index.html ]; then
+          echo "Error: index.html not found"
+          exit 1
+        fi
+        echo "✓ index.html found"
+    
+    - name: Check JavaScript syntax
+      run: node -c server.js
+    
+    - name: Start server in background
+      run: |
+        node server.js &
+        SERVER_PID=$!
+        echo "SERVER_PID=$SERVER_PID" >> $GITHUB_ENV
+        sleep 3
+    
+    - name: Test server is running
+      run: |
+        response=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:3000)
+        if [ "$response" -eq 200 ]; then
+          echo "✓ Server is running and responding with status 200"
+        else
+          echo "✗ Server responded with status $response"
+          exit 1
+        fi
+    
+    - name: Test HTML content is served
+      run: |
+        content=$(curl -s http://localhost:3000)
+        if echo "$content" | grep -q "Calculator"; then
+          echo "✓ Calculator HTML is being served correctly"
+        else
+          echo "✗ Calculator HTML not found in response"
+          exit 1
+        fi
+    
+    - name: Stop server
+      if: always()
+      run: |
+        if [ ! -z "$SERVER_PID" ]; then
+          kill $SERVER_PID || true
+        fi
+        pkill -f "node server.js" || true
+
+  lint:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20.x'
+    
+    - name: Validate HTML
+      run: |
+        echo "Checking HTML structure..."
+        if grep -q "<!DOCTYPE html>" index.html; then
+          echo "✓ Valid HTML5 doctype found"
+        else
+          echo "✗ HTML5 doctype missing"
+          exit 1
+        fi
+    
+    - name: Check for required HTML elements
+      run: |
+        required_elements=("calculator" "display" "buttons")
+        for element in "${required_elements[@]}"; do
+          if grep -q "$element" index.html; then
+            echo "✓ Found: $element"
+          else
+            echo "✗ Missing: $element"
+            exit 1
+          fi
+        done
+    
+    - name: Validate package.json
+      run: |
+        if [ -f package.json ]; then
+          node -e "JSON.parse(require('fs').readFileSync('package.json', 'utf8'))"
+          echo "✓ package.json is valid JSON"
+        else
+          echo "✗ package.json not found"
+          exit 1
+        fi
