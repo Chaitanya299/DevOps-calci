@@ -1,0 +1,36 @@
+# Node modules
+node_modules
+npm-debug.log
+
+# Git and version control
+.git
+.gitignore
+README.md
+
+# Documentation
+*.md
+
+# IDE files
+.vscode
+.idea
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# CI/CD files (not needed in container)
+.github
+
+# Temporary files
+*.tmp
+*.log
+
+# Development files
+.env.local
+.env.development
+
+# Build artifacts (if any)
+dist
+build
