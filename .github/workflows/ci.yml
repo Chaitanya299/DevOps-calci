@@ -240,14 +240,14 @@ jobs:
     # This tests your production Dockerfile with all optimizations
     - name: Build Docker image
       run: |
-        docker build -f docker/Dockerfile -t simple-calculator:test .
+        docker build -f docker/Dockerfile -t simple-calculator:latest .
         echo "✓ Docker image built successfully"
 
     # EDUCATIONAL NOTE: Container Runtime Testing
     # This validates that your containerized app works correctly
     - name: Test Docker image
       run: |
-        docker run -d -p 3000:3000 --name test-container simple-calculator:test
+        docker run -d -p 3000:3000 --name test-container simple-calculator:latest
         sleep 5
 
         response=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:3000)
@@ -405,8 +405,8 @@ jobs:
     # EDUCATIONAL NOTE: Image Loading into Cluster
     - name: Load Docker image into KinD
       run: |
-        docker build -f docker/Dockerfile -t simple-calculator:test .
-        kind load docker-image simple-calculator:test --name test-cluster
+        docker build -f docker/Dockerfile -t simple-calculator:latest .
+        kind load docker-image simple-calculator:latest --name test-cluster
         echo "✓ Docker image loaded into KinD"
 
     # EDUCATIONAL NOTE: Kubernetes Deployment Testing

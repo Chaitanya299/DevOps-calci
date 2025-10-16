@@ -263,7 +263,7 @@ kubectl apply -f argocd/application.yaml
 ```yaml
 # GitHub Actions builds and tests Docker
 - name: Build Docker image
-  run: docker build -f docker/Dockerfile -t simple-calculator:test .
+  run: docker build -f docker/Dockerfile -t simple-calculator:latest .
 ```
 
 ### **📊 Monitoring Integration**
