@@ -378,3 +378,7 @@ If you encounter issues or have questions:
 4. **Use the verification checklists** to ensure proper setup
 
 **Happy Learning! 🎓**
+Made with the help of Windsurf AI
+
+*by ~chaitanya ♥️*
+
