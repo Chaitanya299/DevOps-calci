@@ -1,4 +1,8 @@
-name: CI Pipeline
+name: Educational CI/CD Pipeline - From Basic to Advanced
+
+# STUDY REPOSITORY: Live DevOps Implementation
+# This file demonstrates the evolution from basic CI to comprehensive DevOps pipeline
+# Perfect for learning Docker, Kubernetes, Argo CD, and GitOps implementation
 
 on:
   push:
@@ -7,51 +11,186 @@ on:
     branches: [ main, master, develop ]
 
 jobs:
+  # ============================================================================
+  # 📚 ORIGINAL BASIC CI PIPELINE (For Reference)
+  # ============================================================================
+  # This is the original simple CI pipeline that was used before adding DevOps tech
+  # Uncomment this section to use the basic version, or study it to understand progression
+
+  # name: CI Pipeline
+  #
+  # on:
+  #   push:
+  #     branches: [ main, master, develop ]
+  #   pull_request:
+  #     branches: [ main, master, develop ]
+  #
+  # jobs:
+  #   build-and-test:
+  #     runs-on: ubuntu-latest
+  #
+  #     strategy:
+  #       matrix:
+  #         node-version: [18.x, 20.x]
+  #
+  #     steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v4
+  #
+  #     - name: Setup Node.js ${{ matrix.node-version }}
+  #       uses: actions/setup-node@v4
+  #       with:
+  #         node-version: ${{ matrix.node-version }}
+  #
+  #     - name: Install dependencies
+  #       run: npm install
+  #
+  #     - name: Verify server file exists
+  #       run: |
+  #         if [ ! -f server.js ]; then
+  #           echo "Error: server.js not found"
+  #           exit 1
+  #         fi
+  #         echo "✓ server.js found"
+  #
+  #     - name: Verify HTML file exists
+  #       run: |
+  #         if [ ! -f index.html ]; then
+  #           echo "Error: index.html not found"
+  #           exit 1
+  #         fi
+  #         echo "✓ index.html found"
+  #
+  #     - name: Check JavaScript syntax
+  #       run: node -c server.js
+  #
+  #     - name: Start server in background
+  #       run: |
+  #         node server.js &
+  #         SERVER_PID=$!
+  #         echo "SERVER_PID=$SERVER_PID" >> $GITHUB_ENV
+  #         sleep 3
+  #
+  #     - name: Test server is running
+  #       run: |
+  #         response=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:3000)
+  #         if [ "$response" -eq 200 ]; then
+  #           echo "✓ Server is running and responding with status 200"
+  #         else
+  #           echo "✗ Server responded with status $response"
+  #           exit 1
+  #         fi
+  #
+  #     - name: Test HTML content is served
+  #       run: |
+  #         content=$(curl -s http://localhost:3000)
+  #         if echo "$content" | grep -q "Calculator"; then
+  #           echo "✓ Calculator HTML is being served correctly"
+  #         else
+  #           echo "✗ Calculator HTML not found in response"
+  #           exit 1
+  #         fi
+  #
+  #     - name: Stop server
+  #       if: always()
+  #       run: |
+  #         if [ ! -z "$SERVER_PID" ]; then
+  #           kill $SERVER_PID || true
+  #         fi
+  #         pkill -f "node server.js" || true
+  #
+  #   lint:
+  #     runs-on: ubuntu-latest
+  #
+  #     steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v4
+  #
+  #     - name: Setup Node.js
+  #       uses: actions/setup-node@v4
+  #       with:
+  #         node-version: '20.x'
+  #
+  #     - name: Validate HTML
+  #       run: |
+  #         echo "Checking HTML structure..."
+  #         if grep -q "<!DOCTYPE html>" index.html; then
+  #           echo "✓ Valid HTML5 doctype found"
+  #         else
+  #           echo "✗ HTML5 doctype missing"
+  #           exit 1
+  #         fi
+  #
+  #     - name: Check for required HTML elements
+  #       run: |
+  #         required_elements=("calculator" "display" "buttons")
+  #         for element in "${required_elements[@]}"; do
+  #           if grep -q "$element" index.html; then
+  #             echo "✓ Found: $element"
+  #           else
+  #             echo "✗ Missing: $element"
+  #             exit 1
+  #           fi
+  #         done
+  #
+  #     - name: Validate package.json
+  #       run: |
+  #         if [ -f package.json ]; then
+  #           node -e "JSON.parse(require('fs').readFileSync('package.json', 'utf8'))"
+  #           echo "✓ package.json is valid JSON"
+  #         else
+  #           echo "✗ package.json not found"
+  #           exit 1
+  #         fi
+
+  # ============================================================================
+  # 📚 PHASE 1: BASIC APPLICATION TESTING (Original Simple Pipeline)
+  # ============================================================================
+  # This is what a basic CI pipeline looks like - just testing the core app
+  # Perfect starting point for any Node.js project
+
   build-and-test:
+    name: "📦 Basic App Testing (Phase 1)"
     runs-on: ubuntu-latest
-    
+
     strategy:
       matrix:
         node-version: [18.x, 20.x]
-    
+
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
-    
+
     - name: Setup Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v4
       with:
         node-version: ${{ matrix.node-version }}
-    
+
     - name: Install dependencies
       run: npm install
-    
-    - name: Verify server file exists
+
+    # EDUCATIONAL NOTE: Basic File Validation
+    # This is the foundation - ensuring core files exist before testing
+    - name: Verify core files exist
       run: |
-        if [ ! -f server.js ]; then
-          echo "Error: server.js not found"
-          exit 1
-        fi
-        echo "✓ server.js found"
-    
-    - name: Verify HTML file exists
-      run: |
-        if [ ! -f index.html ]; then
-          echo "Error: index.html not found"
-          exit 1
-        fi
-        echo "✓ index.html found"
-    
+        if [ ! -f server.js ]; then echo "✗ server.js not found" && exit 1; fi
+        if [ ! -f index.html ]; then echo "✗ index.html not found" && exit 1; fi
+        if [ ! -f package.json ]; then echo "✗ package.json not found" && exit 1; fi
+        echo "✓ All core files found"
+
     - name: Check JavaScript syntax
       run: node -c server.js
-    
+
+    # EDUCATIONAL NOTE: Application Startup Testing
+    # This tests if your app actually starts and responds
+    # Critical for catching runtime issues early
     - name: Start server in background
       run: |
         node server.js &
         SERVER_PID=$!
         echo "SERVER_PID=$SERVER_PID" >> $GITHUB_ENV
-        sleep 3
-    
+        sleep 5
+
     - name: Test server is running
       run: |
         response=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:3000)
@@ -61,7 +200,7 @@ jobs:
           echo "✗ Server responded with status $response"
           exit 1
         fi
-    
+
     - name: Test HTML content is served
       run: |
         content=$(curl -s http://localhost:3000)
@@ -71,37 +210,272 @@ jobs:
           echo "✗ Calculator HTML not found in response"
           exit 1
         fi
-    
+
     - name: Stop server
       if: always()
       run: |
-        if [ ! -z "$SERVER_PID" ]; then
-          kill $SERVER_PID || true
-        fi
+        if [ ! -z "$SERVER_PID" ]; then kill $SERVER_PID || true; fi
         pkill -f "node server.js" || true
 
-  lint:
+  # ============================================================================
+  # PHASE 2: DOCKER CONTAINERIZATION (Adding Container Tech)
+  # ============================================================================
+  # This demonstrates how to test Docker integration in CI/CD
+
+  docker-build:
+    name: "🐳 Docker Testing (Phase 2)"
     runs-on: ubuntu-latest
-    
+    needs: build-and-test
+
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
-    
+
+    # EDUCATIONAL NOTE: Docker Setup in CI
+    # This is how you set up Docker in GitHub Actions for testing
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
+    # EDUCATIONAL NOTE: Multi-Stage Docker Build Testing
+    # This tests your production Dockerfile with all optimizations
+    - name: Build Docker image
+      run: |
+        docker build -f docker/Dockerfile -t simple-calculator:test .
+        echo "✓ Docker image built successfully"
+
+    # EDUCATIONAL NOTE: Container Runtime Testing
+    # This validates that your containerized app works correctly
+    - name: Test Docker image
+      run: |
+        docker run -d -p 3000:3000 --name test-container simple-calculator:test
+        sleep 5
+
+        response=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:3000)
+        if [ "$response" -eq 200 ]; then
+          echo "✓ Docker container is running and responding"
+        else
+          echo "✗ Docker container responded with status $response"
+          exit 1
+        fi
+
+        content=$(curl -s http://localhost:3000)
+        if echo "$content" | grep -q "Calculator"; then
+          echo "✓ Calculator HTML is served correctly from Docker"
+        else
+          echo "✗ Calculator HTML not found in Docker response"
+          exit 1
+        fi
+
+    - name: Cleanup Docker container
+      if: always()
+      run: |
+        docker stop test-container || true
+        docker rm test-container || true
+
+  # ============================================================================
+  # PHASE 3: KUBERNETES MANIFEST VALIDATION (Adding K8s Tech)
+  # ============================================================================
+
+  kubernetes-validation:
+    name: "☸️ Kubernetes Validation (Phase 3)"
+    runs-on: ubuntu-latest
+    needs: build-and-test
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    # EDUCATIONAL NOTE: Kubernetes Setup in CI
+    - name: Install kubectl
+      uses: azure/setup-kubectl@v3
+
+    # EDUCATIONAL NOTE: Manifest File Validation
+    - name: Validate Kubernetes manifests
+      run: |
+        if [ ! -f k8s/deployment.yaml ]; then echo "✗ k8s/deployment.yaml not found" && exit 1; fi
+        if [ ! -f k8s/service.yaml ]; then echo "✗ k8s/service.yaml not found" && exit 1; fi
+        echo "✓ Kubernetes manifests found"
+
+    # EDUCATIONAL NOTE: YAML Syntax Validation
+    - name: Validate YAML syntax
+      run: |
+        for file in k8s/*.yaml; do
+          if python3 -c "import yaml; yaml.safe_load(open('$file'))" 2>/dev/null; then
+            echo "✓ $file has valid YAML syntax"
+          else
+            echo "✗ $file has invalid YAML syntax"
+            exit 1
+          fi
+        done
+
+    # EDUCATIONAL NOTE: Configuration Validation
+    - name: Check required fields in deployment
+      run: |
+        if ! grep -q "kind: Deployment" k8s/deployment.yaml; then
+          echo "✗ Deployment kind not found"
+          exit 1
+        fi
+        if ! grep -q "simple-calculator:latest" k8s/deployment.yaml; then
+          echo "✗ Docker image reference not found"
+          exit 1
+        fi
+        echo "✓ Deployment manifest is properly configured"
+
+  # ============================================================================
+  # PHASE 4: ARGOCD GITOPS VALIDATION (Adding GitOps Tech)
+  # ============================================================================
+
+  argocd-validation:
+    name: "🔄 Argo CD Validation (Phase 4)"
+    runs-on: ubuntu-latest
+    needs: build-and-test
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    # EDUCATIONAL NOTE: GitOps Configuration Validation
+    - name: Validate Argo CD application
+      run: |
+        if [ ! -f argocd/application.yaml ]; then
+          echo "✗ argocd/application.yaml not found"
+          exit 1
+        fi
+        echo "✓ Argo CD application manifest found"
+
+    - name: Validate Argo CD YAML syntax
+      run: |
+        if python3 -c "import yaml; yaml.safe_load(open('argocd/application.yaml'))" 2>/dev/null; then
+          echo "✓ Argo CD application has valid YAML syntax"
+        else
+          echo "✗ Argo CD application has invalid YAML syntax"
+          exit 1
+        fi
+
+    # EDUCATIONAL NOTE: GitOps Configuration Checking
+    - name: Check Argo CD configuration
+      run: |
+        if ! grep -q "repoURL:" argocd/application.yaml; then
+          echo "✗ Argo CD repoURL not configured"
+          exit 1
+        fi
+        if ! grep -q "path: k8s" argocd/application.yaml; then
+          echo "✗ Argo CD path not configured correctly"
+          exit 1
+        fi
+        if ! grep -q "automated:" argocd/application.yaml; then
+          echo "✗ Argo CD sync policy not configured"
+          exit 1
+        fi
+        echo "✓ Argo CD application is properly configured"
+
+  # ============================================================================
+  # PHASE 5: END-TO-END TESTING (Complete DevOps Stack)
+  # ============================================================================
+
+  e2e-test:
+    name: "🔬 E2E Testing (Phase 5)"
+    runs-on: ubuntu-latest
+    needs: [docker-build, kubernetes-validation, lint]
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
+    # EDUCATIONAL NOTE: Local Kubernetes Testing with KinD
+    - name: Create KinD cluster
+      run: |
+        curl -Lo ./kind https://kind.sigs.k8s.io/dl/v0.20.0/kind-linux-amd64
+        chmod +x ./kind
+        sudo mv ./kind /usr/local/bin/kind
+
+        kind create cluster --name test-cluster --config - <<EOF
+        kind: Cluster
+        apiVersion: kind.x-k8s.io/v1alpha4
+        nodes:
+        - role: control-plane
+          image: kindest/node:v1.27.3
+        EOF
+
+        echo "✓ KinD cluster created"
+
+    # EDUCATIONAL NOTE: Image Loading into Cluster
+    - name: Load Docker image into KinD
+      run: |
+        docker build -f docker/Dockerfile -t simple-calculator:test .
+        kind load docker-image simple-calculator:test --name test-cluster
+        echo "✓ Docker image loaded into KinD"
+
+    # EDUCATIONAL NOTE: Kubernetes Deployment Testing
+    - name: Deploy to Kubernetes
+      run: |
+        kubectl apply -f k8s/deployment.yaml
+        kubectl apply -f k8s/service.yaml
+        kubectl wait --for=condition=available --timeout=60s deployment/simple-calculator
+        echo "✓ Application deployed to Kubernetes"
+
+    # EDUCATIONAL NOTE: Full Stack Testing
+    - name: Test Kubernetes deployment
+      run: |
+        kubectl port-forward service/simple-calculator-service 3000:80 &
+        FORWARD_PID=$!
+        sleep 5
+
+        response=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:3000)
+        if [ "$response" -eq 200 ]; then
+          echo "✓ Kubernetes deployment is working"
+        else
+          echo "✗ Kubernetes deployment failed with status $response"
+          exit 1
+        fi
+
+        content=$(curl -s http://localhost:3000)
+        if echo "$content" | grep -q "Calculator"; then
+          echo "✓ Calculator is accessible through Kubernetes"
+        else
+          echo "✗ Calculator content not found in Kubernetes response"
+          exit 1
+        fi
+
+        kill $FORWARD_PID || true
+
+    - name: Cleanup KinD cluster
+      if: always()
+      run: |
+        kind delete cluster --name test-cluster || true
+
+  # ============================================================================
+  # PHASE 1 CONTINUED: CODE LINTING (Enhanced Original)
+  # ============================================================================
+
+  lint:
+    name: "🔍 Code Linting (Phase 1 Enhanced)"
+    runs-on: ubuntu-latest
+    needs: build-and-test
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
     - name: Setup Node.js
       uses: actions/setup-node@v4
       with:
         node-version: '20.x'
-    
+
+    # EDUCATIONAL NOTE: HTML Validation
     - name: Validate HTML
       run: |
-        echo "Checking HTML structure..."
         if grep -q "<!DOCTYPE html>" index.html; then
           echo "✓ Valid HTML5 doctype found"
         else
           echo "✗ HTML5 doctype missing"
           exit 1
         fi
-    
+
+    # EDUCATIONAL NOTE: Content Validation
     - name: Check for required HTML elements
       run: |
         required_elements=("calculator" "display" "buttons")
@@ -113,7 +487,8 @@ jobs:
             exit 1
           fi
         done
-    
+
+    # EDUCATIONAL NOTE: Package Configuration Validation
     - name: Validate package.json
       run: |
         if [ -f package.json ]; then
